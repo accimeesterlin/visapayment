@@ -1,6 +1,9 @@
 const request = require('request');
 const crypto = require('crypto');
 
+const secret_key = ''; // add your secret key 
+const api_key = ''; // add your api key
+
 const body = JSON.stringify({
 	"amount": "20",
 		"currency": "USD",
@@ -16,8 +19,8 @@ const body = JSON.stringify({
 // Generating a X-PAY-TOKEN
 const getXPayToken = () => {
 	const timestamp = Math.floor(Date.now() / 1000); 
-	const sharedSecret = secret_key; // secret here
-	const queryParams = 'apikey=' + api_key; // api key here
+	const sharedSecret = secret_key; 
+	const queryParams = 'apikey=' + api_key; 
 	const resourcePath = 'payments/v1/authorizations';
 	const preHashString = timestamp + resourcePath + queryParams + body;
 	const hashString = crypto.createHmac('SHA256', sharedSecret).update(preHashString).digest('hex');
@@ -31,7 +34,7 @@ const getXPayToken = () => {
 const requestTransaction = () => {
 	const token = getXPayToken();
 	request({
-		uri:'https://sandbox.api.visa.com/cybersource/payments/v1/authorizations?apikey=' + api_key, // api key here
+		uri:'https://sandbox.api.visa.com/cybersource/payments/v1/authorizations?apikey=' + api_key, 
 		method:'POST',
 		body: body,
 		headers:{
